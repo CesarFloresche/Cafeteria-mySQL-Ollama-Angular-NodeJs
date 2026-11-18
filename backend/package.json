@@ -1,0 +1,27 @@
+{
+  "name": "coffeehouse-api",
+  "version": "1.0.0",
+  "description": "API de cafetería con MySQL y chatbot Ollama",
+  "keywords": [
+    "api",
+    "bd",
+    "backend"
+  ],
+  "license": "ISC",
+  "author": "Richard Jimenez",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "mysql2": "^3.14.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

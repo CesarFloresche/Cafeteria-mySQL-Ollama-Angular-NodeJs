@@ -1,59 +1,76 @@
-# Veterinaria
+# CoffeeHouse
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.0.
+Sitio de cafetería con frontend Angular, API REST en Node.js/Express y MySQL
+local de XAMPP. La página toma su contenido de la base de datos y vuelve a
+consultar la API cada cinco segundos para reflejar cambios hechos desde
+phpMyAdmin o desde la base de datos. El chatbot utiliza Ollama con Gemma 3 y
+consulta los datos actuales del negocio antes de responder.
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
+- Node.js y npm.
+- XAMPP con MySQL/MariaDB activo.
+- Ollama instalado y el modelo descargado (`ollama pull gemma3`) para habilitar
+  el chatbot.
 
-```bash
-ng serve
+## Preparar MySQL
+
+1. Inicia MySQL desde el panel de XAMPP.
+2. En phpMyAdmin, crea una base llamada `cafeteria`.
+3. Selecciona esa base e importa `backend/database/schema.sql`.
+4. Importa una sola vez `backend/database/seed-cafeteria.sql` para cargar
+   contenido de demostración.
+5. Edita los registros de `cafeteria`, `servicios`, `productos_cafeteria` y
+   `galeria` en phpMyAdmin. La página consulta los cambios en un máximo de unos
+   cinco segundos. `contactos` guarda los formularios recibidos.
+
+Los textos de dirección, historia y horarios del seed son ejemplos para
+reemplazar. El video de portada está alojado en Pexels; la URL y el poster se
+pueden cambiar en la tabla `cafeteria`.
+
+## Iniciar el backend
+
+En `backend`, copia `.env.example` a `.env` y ajusta usuario, contraseña y base
+según la configuración de MySQL de tu XAMPP. `.env` es local y no se debe
+subir a GitHub.
+
+```powershell
+cd backend
+npm install
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+La API queda en `http://127.0.0.1:3000`. Comprueba la conexión en
+`http://127.0.0.1:3000/api/health`.
 
-## Code scaffolding
+## Iniciar Angular
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+En otra terminal:
 
-```bash
-ng generate component component-name
+```powershell
+cd veterinaria
+npm install
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Abre `http://localhost:4200`. El proxy de desarrollo reenvía `/api` al backend.
+Para producción, configura el host para que enrute `/api` al backend Node.js.
 
-```bash
-ng generate --help
-```
+## APIs de la cafetería
 
-## Building
+- `GET /api/cafeteria`: negocio, servicios, productos y galería.
+- `POST /api/cafeteria/contacto`: guarda un mensaje en `contactos`.
+- `POST /api/chatbot`: pregunta al asistente conectado a Ollama/Gemma 3.
 
-To build the project run:
+La consulta periódica detecta ediciones hechas directamente en MySQL; el
+contenido no se guarda en el navegador como fuente de verdad. Si el backend o
+la base no están disponibles, la página informa del problema y vuelve a
+intentarlo.
 
-```bash
-ng build
-```
+## Publicación en GitHub
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+El `.gitignore` raíz excluye `.env`, dependencias y artefactos generados.
+GitHub Pages solo sirve contenido estático: no ejecuta Node.js, MySQL/XAMPP ni
+Ollama. Para una versión pública, aloja la API y una base MySQL accesible en un
+servidor; mantén las credenciales como variables de entorno del proveedor y
+ajusta CORS y el enrutamiento del frontend.

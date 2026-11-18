@@ -1,0 +1,68 @@
+CREATE TABLE IF NOT EXISTS cafeteria (
+  id INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(120) NOT NULL,
+  slogan VARCHAR(255) DEFAULT NULL,
+  descripcion TEXT DEFAULT NULL,
+  historia TEXT DEFAULT NULL,
+  direccion VARCHAR(255) DEFAULT NULL,
+  telefono VARCHAR(40) DEFAULT NULL,
+  correo VARCHAR(254) DEFAULT NULL,
+  horarios VARCHAR(255) DEFAULT NULL,
+  whatsapp VARCHAR(30) DEFAULT NULL,
+  instagram VARCHAR(255) DEFAULT NULL,
+  facebook VARCHAR(255) DEFAULT NULL,
+  video_url VARCHAR(1000) DEFAULT NULL,
+  video_poster VARCHAR(1000) DEFAULT NULL,
+  video_credit VARCHAR(100) DEFAULT NULL,
+  video_credit_url VARCHAR(1000) DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS servicios (
+  id INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(120) NOT NULL,
+  descripcion TEXT DEFAULT NULL,
+  icono VARCHAR(20) DEFAULT NULL,
+  imagen VARCHAR(1000) DEFAULT NULL,
+  orden INT NOT NULL DEFAULT 0,
+  activo TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (id),
+  KEY idx_servicios_publicados (activo, orden)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS productos_cafeteria (
+  id INT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(150) NOT NULL,
+  descripcion TEXT DEFAULT NULL,
+  imagen VARCHAR(1000) DEFAULT NULL,
+  precio DECIMAL(10,2) NOT NULL DEFAULT 0,
+  categoria VARCHAR(80) NOT NULL DEFAULT 'Café',
+  destacada TINYINT(1) NOT NULL DEFAULT 0,
+  activo TINYINT(1) NOT NULL DEFAULT 1,
+  orden INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  KEY idx_productos_cafeteria_publicados (activo, orden),
+  KEY idx_productos_cafeteria_categoria (categoria)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS galeria (
+  id INT NOT NULL AUTO_INCREMENT,
+  imagen VARCHAR(1000) NOT NULL,
+  texto_alternativo VARCHAR(255) NOT NULL,
+  descripcion VARCHAR(255) DEFAULT NULL,
+  orden INT NOT NULL DEFAULT 0,
+  activo TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (id),
+  KEY idx_galeria_publicada (activo, orden)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS contactos (
+  id INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(100) NOT NULL,
+  email VARCHAR(254) NOT NULL,
+  telefono VARCHAR(40) DEFAULT NULL,
+  mensaje TEXT NOT NULL,
+  fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_contactos_fecha (fecha_creacion)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
